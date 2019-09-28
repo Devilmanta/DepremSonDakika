@@ -1,3 +1,13 @@
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-54425038-3"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-54425038-3');
+</script>
+
 <?php
     libxml_use_internal_errors(true);
     $html = file_get_contents( "http://www.koeri.boun.edu.tr/scripts/lst2.asp");
@@ -14,7 +24,10 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <style type="text/css">
-        
+        html, body{
+            height:100%;
+        }
+
         .headTitle{
             text-align: center;
             font-size: 300%;
@@ -55,11 +68,15 @@
         td{
             padding: 7px;
         }
+        tr{
+            cursor: pointer;
+        }
         
         @media (min-width: 1500px)
         {
             #navigation{
-                width: 60%;
+                width: 55%;
+
                 margin: 0 auto;
             }
         }
@@ -180,6 +197,8 @@
             background-color: #555; /* Add a dark-grey background on hover */
         }
         footer{
+            bottom: 0;
+            width: 100%;
             background-color:dimgray;
             font-style: italic;
             font-size: 60%;
@@ -192,6 +211,8 @@
             height: 300px;
             background-color: grey;
         }
+        
+      
     </style>
   </head>
   <body>
@@ -222,7 +243,10 @@
               <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                   <li class="nav-item active">
-                    <a class="nav-link" href="/Index.php">Anasayfa <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/Index.php">Liste <span class="sr-only">(current)</span></a>
+                  </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="/bigmap.php">Harita</a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" href="http://www.koeri.boun.edu.tr/scripts/sondepremler.asp" target="_blank">Referans</a>
@@ -295,7 +319,8 @@
         </div>
     </div>
       <button onclick="topFunction()" id="myBtn" title="Go to top">Yukarı</button>
-      <footer>
+      <footer class="footer">
+
         DepremSonDakika.com Engür Canfes tarafından tasarlanmıştır. Kandilli rasatanesi sitesinden alınan verilerini içerir. ©®2017 
       </footer>
     <!-- jQuery first, then Tether, then Bootstrap JS. -->
@@ -307,28 +332,27 @@
             (adsbygoogle = window.adsbygoogle || []).push({});
         </script>
     <script async defer
-  src="https://maps.googleapis.com/maps/api/js?key=YOURAPI_KEY&callback=initMap">
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD7OFbCez5Qz-OpR0B-VWcNU9I0hrGrpvw&callback=initMap">
 </script>
       <script type="text/javascript">
 
-        function refreshPage() {
-          var screenSize = $(window).width();
-          if(screenSize>694)
-          {
-              $("#tablo").width(700);
-              $(".adsbygoogle").attr("data-ad-slot", "9428113607");
-              $(".adsbygoogle").attr("style", "display:block;width:728px;height:90px;");
-          }
-          else
-          {
-              $(".adsbygoogle").attr("data-ad-slot", "7326217415");
-              $(".adsbygoogle").attr("style", "display:block;width:320px;height:100px;");
 
-          }
-        }
+
+
+
+
+
+
+
+
+
+
+
+
+
           
-        refreshPage();
-          
+
+
         //****Yukarı tuşu****
         // When the user scrolls down 20px from the top of the document, show the button
         window.onscroll = function() {scrollFunction()};
@@ -350,14 +374,26 @@
         
         $("tr").click(function(){
             var latLng = new google.maps.LatLng(parseFloat($(this).find('td:nth-child(3)').text()).toFixed(3), parseFloat($(this).find('td:nth-child(4)').text()).toFixed(3));
+            var zoom = 8;
+            var magnitude = parseFloat($(this).find('td:nth-child(6)').text())
+            if(magnitude>4)
+                {
+                    zoom = 5;
+                }
             var radius = Math.pow(parseInt($(this).find('td:nth-child(6)').text()),3)*1000;
+            
               $('.modal').modal('show');
               $('.modal').on("shown.bs.modal", function initMap() {
                     var uluru = latLng;
                     var map = new google.maps.Map(document.getElementById('map'), {
-                      zoom: 8,
+                      zoom: zoom,
+
                       center: uluru
                     });
+                    //var marker = new google.maps.Marker({
+                      //position: uluru,
+                      //map: map
+                    //});
                     var cityCircle = new google.maps.Circle({
                         strokeColor: '#FF0000',
                         strokeOpacity: 0.8,
@@ -371,6 +407,26 @@
               });
             $(".modal-title").html($(this).find('td:nth-child(7)').text());
         });
+          
+        /// *****REKLAMLAR*****  
+          function refreshPage() {
+          var screenSize = $(window).width();
+          if(screenSize>694)
+          {
+              $("#tablo").width(700);
+              $(".adsbygoogle").attr("data-ad-slot", "9428113607");
+              $(".adsbygoogle").attr("style", "display:block;width:728px;height:90px;");
+          }
+          else
+          {
+              $(".adsbygoogle").attr("data-ad-slot", "7326217415");
+              $(".adsbygoogle").attr("style", "display:block;width:320px;height:100px;");
+
+          }
+        }
+          
+        refreshPage();
+        
       </script>
   </body>
 </html>
